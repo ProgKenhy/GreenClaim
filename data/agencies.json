@@ -1,0 +1,48 @@
+{
+  "_status": "ЧЕРНОВИК. Названия и контакты ведомств требуют верификации юристами команды перед публичным запуском.",
+  "agencies": {
+    "rpn": {
+      "name": "Управление Федеральной службы по надзору в сфере природопользования (Росприроднадзора) по Калининградской области",
+      "short": "Росприроднадзор",
+      "contact": {"web": null, "email": null, "address": null},
+      "verified": false
+    },
+    "forest": {
+      "name": "Орган исполнительной власти Калининградской области в сфере лесных отношений",
+      "short": "Региональный орган лесного хозяйства",
+      "contact": {"web": null, "email": null, "address": null},
+      "verified": false
+    },
+    "rshn": {
+      "name": "Управление Россельхознадзора по Калининградской области",
+      "short": "Россельхознадзор",
+      "contact": {"web": null, "email": null, "address": null},
+      "verified": false
+    },
+    "rpn_health": {
+      "name": "Управление Роспотребнадзора по Калининградской области",
+      "short": "Роспотребнадзор",
+      "contact": {"web": null, "email": null, "address": null},
+      "verified": false
+    },
+    "oopt": {
+      "name": "Администрация особо охраняемой природной территории (национальный парк / заказник), на территории которой выявлено нарушение",
+      "short": "Администрация ООПТ",
+      "contact": {"web": null, "email": null, "address": null},
+      "verified": false
+    },
+    "prosecutor": {
+      "name": "Прокуратура Калининградской области",
+      "short": "Прокуратура",
+      "contact": {"web": null, "email": null, "address": null},
+      "verified": false
+    },
+    "municipality": {
+      "name": "Администрация муниципального образования",
+      "short": "Администрация муниципалитета",
+      "contact": {"web": null, "email": null, "address": null},
+      "verified": false,
+      "_note": "Уточняется по координатам (greenclaim/geo.py)"
+    }
+  }
+}
