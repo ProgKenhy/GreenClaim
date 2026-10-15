@@ -8,8 +8,5 @@ pillow-heif>=0.16      # снимки HEIC с iPhone (необязательно
 maxapi>=1.2
 aiohttp>=3.9
 
-# Telegram (необязательно)
-aiogram>=3.13,<4
-
 # тесты
 pytest>=8.0

@@ -1,0 +1,33 @@
+# Секреты и локальные настройки
+.env
+
+# Виртуальное окружение
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Тесты и кэши
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Данные бота: БД с обезличенными обращениями и временные фото пользователей
+*.sqlite3
+*.db
+tmp_uploads/
+
+# Выгрузки карты
+*.geojson
+
+# IDE и ОС
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

@@ -39,7 +39,7 @@ def _to_deg(dms, ref) -> float | None:
 
 
 def read_photo_meta(src: str | Path | IO[bytes]) -> PhotoMeta:
-    """Достаёт GPS и время съёмки. Telegram вырезает EXIF из «сжатых» фото,
+    """Достаёт GPS и время съёмки. Мессенджеры вырезают EXIF из «сжатых» фото,
     поэтому бот просит присылать снимок как файл (документ)."""
     try:
         with Image.open(src) as img:

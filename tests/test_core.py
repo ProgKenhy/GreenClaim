@@ -137,3 +137,40 @@ def test_storage_no_personal_data(tmp_path):
     assert gj["features"][0]["geometry"]["coordinates"] == [20.5, 54.7]
     cols = {r[1] for r in __import__("sqlite3").connect(tmp_path / "t.db").execute("PRAGMA table_info(reports)")}
     assert not ({"name", "address", "fio", "user_id", "chat_id"} & cols)
+
+
+# ---- шрифты (регрессия: «отсутствует шрифт» при создании PDF) ----
+def test_fonts_bundled_in_project():
+    from greenclaim.config import ROOT
+    for f in ("DejaVuSerif.ttf", "DejaVuSerif-Bold.ttf"):
+        assert (ROOT / "fonts" / f).stat().st_size > 100_000
+
+
+def test_pdf_works_without_system_fonts_and_from_other_cwd(tmp_path):
+    """Системные папки со шрифтами недоступны, рабочая папка — чужая: PDF всё равно собирается."""
+    import os
+    from greenclaim import pdf as pdfmod
+    q = M.qualify("dump", {"land": "forest", "waste": "hazard", "offender": "unknown"})
+    data = ComplaintData(qualification=q, addressees=resolve(q, 54.77, 20.60), lat=54.77, lon=20.60,
+                         applicant_name="Иванова Мария Петровна", applicant_address="г. Калининград")
+    saved = (pdfmod._FONT_DIRS, pdfmod._fonts_ready, os.getcwd())
+    try:
+        pdfmod._FONT_DIRS = [pdfmod.ROOT / "fonts"]      # только шрифты проекта
+        pdfmod._fonts_ready = False
+        os.chdir(tmp_path)
+        assert build_complaint_pdf(data).startswith(b"%PDF")
+    finally:
+        os.chdir(saved[2])
+        pdfmod._FONT_DIRS, pdfmod._fonts_ready = saved[0], saved[1]
+
+
+def test_missing_fonts_give_clear_error(tmp_path):
+    from greenclaim import pdf as pdfmod
+    saved = (pdfmod._FONT_DIRS, pdfmod._fonts_ready)
+    try:
+        pdfmod._FONT_DIRS, pdfmod._fonts_ready = [tmp_path], False
+        with pytest.raises(RuntimeError) as e:
+            pdfmod._register_fonts()
+        assert "fonts" in str(e.value)
+    finally:
+        pdfmod._FONT_DIRS, pdfmod._fonts_ready = saved

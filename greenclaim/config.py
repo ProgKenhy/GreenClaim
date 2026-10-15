@@ -12,8 +12,7 @@ except ImportError:
     pass
 DATA_DIR = ROOT / "data"
 
-BOT_TOKEN = os.getenv("BOT_TOKEN", "")          # Telegram
-MAX_BOT_TOKEN = os.getenv("MAX_BOT_TOKEN", "")  # MAX
+MAX_BOT_TOKEN = os.getenv("MAX_BOT_TOKEN", "")
 DB_PATH = Path(os.getenv("DB_PATH", ROOT / "greenclaim.sqlite3"))
 UPLOAD_DIR = Path(os.getenv("UPLOAD_DIR", ROOT / "tmp_uploads"))
 MAX_PHOTOS = 3

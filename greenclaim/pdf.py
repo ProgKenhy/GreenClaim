@@ -17,17 +17,20 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Image as RLImage
 from reportlab.platypus import KeepTogether, Paragraph, SimpleDocTemplate, Spacer
 
+from .config import ROOT
 from .geo import yandex_map_url
 from .legal import Qualification
 from .routing import Addressee
 
+# Шрифт DejaVu Serif лежит в проекте (fonts/), поэтому PDF собирается на любой ОС.
+# Системные папки — только запасной вариант.
 _FONT_DIRS = [
-    os.getenv("FONT_DIR", ""),
-    "./fonts",
-    "/usr/share/fonts/truetype/dejavu",
-    "/usr/share/fonts/dejavu",
-    "/Library/Fonts",
-    "C:/Windows/Fonts",
+    ROOT / "fonts",
+    Path(os.getenv("FONT_DIR", "")) if os.getenv("FONT_DIR") else None,
+    Path("/usr/share/fonts/truetype/dejavu"),
+    Path("/usr/share/fonts/dejavu"),
+    Path("/Library/Fonts"),
+    Path("C:/Windows/Fonts"),
 ]
 _fonts_ready = False
 
@@ -36,17 +39,19 @@ def _register_fonts() -> None:
     global _fonts_ready
     if _fonts_ready:
         return
+    tried = []
     for d in filter(None, _FONT_DIRS):
-        reg, bold = Path(d) / "DejaVuSerif.ttf", Path(d) / "DejaVuSerif-Bold.ttf"
-        if reg.exists() and bold.exists():
+        reg, bold = d / "DejaVuSerif.ttf", d / "DejaVuSerif-Bold.ttf"
+        tried.append(str(d))
+        if reg.is_file() and bold.is_file():
             pdfmetrics.registerFont(TTFont("GC", str(reg)))
             pdfmetrics.registerFont(TTFont("GC-B", str(bold)))
             pdfmetrics.registerFontFamily("GC", normal="GC", bold="GC-B")
             _fonts_ready = True
             return
     raise RuntimeError(
-        "Не найден шрифт DejaVuSerif.ttf / DejaVuSerif-Bold.ttf. "
-        "Положите их в ./fonts или задайте FONT_DIR."
+        "Не найдены шрифты DejaVuSerif.ttf и DejaVuSerif-Bold.ttf. "
+        f"Они должны лежать в папке проекта: {ROOT / 'fonts'}. Проверенные пути: " + "; ".join(tried)
     )
 
 
